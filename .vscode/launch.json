@@ -1,0 +1,23 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "preprocess_toolllama_data",
+            "type": "python",
+            "request": "launch",
+            "program": "preprocess/preprocess_toolllama_data.py",
+            "console": "integratedTerminal",
+            "justMyCode": true,
+            "args": ["--tool_data_dir",
+                     "data/answer/G1_answer",
+                     "--method", 
+                     "DFS_woFilter_w2",
+                     "--output_file", 
+                     "data/answer/toolllama_G1_dfs.json"],
+            "env": {"PYTHONPATH": "$PYTHONPATH:/home/paperspace/chengniu/ToolBench"}
+        }
+    ]
+}

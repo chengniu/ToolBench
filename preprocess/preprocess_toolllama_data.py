@@ -34,6 +34,8 @@ def preprocess_rapidapi(tool_data_dir, method, output_file):
 
     print(f"Preprocessing data from {tool_data_dir} into {output_file}")
     out_list = []
+    n = 0
+    n_valid = 0
     for data_file in os.listdir(os.path.join(tool_data_dir)):
         tmp_instances = []
         if method not in data_file:
@@ -47,6 +49,8 @@ def preprocess_rapidapi(tool_data_dir, method, output_file):
         query = answer_generation["query"]
         functions = answer_generation["function"]
         for train_message in train_messages:
+            print(f"n={n}\tn_valid={n_valid}")
+            n += 1
             conversations = []
             cur_react = ""
             for message_id, message_dict in enumerate(train_message):
@@ -76,7 +80,8 @@ def preprocess_rapidapi(tool_data_dir, method, output_file):
                             "id": f"Step {str(message_id)}: {query}",
                             "conversations":conversations
                         }
-                        tmp_instances.append(tmp_dict)      
+                        tmp_instances.append(tmp_dict)
+                        n_valid += 1
                         break
 
                     # process the former assistant messages into history conversations
@@ -99,6 +104,8 @@ def preprocess_rapidapi(tool_data_dir, method, output_file):
                 else:
                     if role == "system":
                         inputs = process_system_message(content, functions)
+                        if inputs is None:
+                            break
                     else:
                         inputs = content
                     conversations.append({
@@ -114,4 +121,3 @@ def preprocess_rapidapi(tool_data_dir, method, output_file):
 if __name__=='__main__':
     args = parser.parse_args()
     preprocess_rapidapi(args.tool_data_dir, args.method, args.output_file)
-    
